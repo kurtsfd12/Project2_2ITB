@@ -4,7 +4,8 @@
 @if ($errors->any())
 <div class="alert alert-danger">Please fix the validation errors!</div>
 @endif
-<form method="post" action="{{ $book->exists ? '/books/patch/' . $book->id : '/books/put' }}">
+<form method="post" action="{{ $book->exists ? '/books/patch/' . $book->id : '/books/put' }}"
+    enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
         <label for="book-name" class="form-label">Name</label>
@@ -19,7 +20,8 @@
         <select id="book-author" name="author_id" class="form-select @error('author_id') is-invalid @enderror">
             <option value="">Choose the author!</option>
             @foreach($authors as $author)
-            <option value="{{ $author->id }}" @if ($author->id == old('author_id', $book->author->id ?? false)) selected @endif
+            <option value="{{ $author->id }}" @if ($author->id == old('author_id', $book->author->id ?? false)) selected
+                @endif
                 >{{ $author->name }}</option>
             @endforeach
         </select>
@@ -51,7 +53,19 @@
         <p class="invalid-feedback">{{ $errors->first('price') }}</p>
         @enderror
     </div>
-    // image
+    <div class="mb-3">
+        <label for="book-image" class="form-label">Image</label>
+        @if ($book->image)
+        <img src="{{ asset('images/' . $book->image) }}" class="img-fluid img-thumbnail d-block mb-2"
+            alt="{{ $book->name }}">
+        @endif
+        <input type="file" accept="image/png, image/webp, image/jpeg" id="book-image" name="image"
+            class="form-control @error('image') is-invalid @enderror">
+        @error('image')
+        <p class="invalid-feedback">{{ $errors->first('image') }}</p>
+        @enderror
+    </div>
+
     <div class="mb-3">
         <div class="form-check">
             <input type="checkbox" id="book-display" name="display" value="1"
@@ -66,6 +80,7 @@
             @enderror
         </div>
     </div>
+
     <button type="submit" class="btn btn-primary">
         {{ $book->exists ? 'Update' : 'Create' }}
     </button>
