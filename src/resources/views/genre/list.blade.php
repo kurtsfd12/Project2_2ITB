@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 <h1>{{ $title }}</h1>
-<a href="/authors/create" class="btn btn-primary">Izveidot jaunu</a>
+<a href="/genres/create" class="btn btn-primary">Izveidot jaunu</a>
 @if (count($items) > 0)
 <table class="table table-striped table-hover table-sm">
     <thead class="thead-light">
@@ -13,13 +13,13 @@
     </thead>
 
     <tbody>
-        @foreach($items as $author)
+        @foreach($items as $genre)
         <tr>
-            <td>{{ $author->id }}</td>
-            <td>{{ $author->name }}</td>
+            <td>{{ $genre->id }}</td>
+            <td>{{ $genre->name }}</td>
             <td>
-                <a href="/authors/update/{{ $author->id }}" class="btn btn-outline-primary btnsm">Edit</a>
-                <form action="/authors/delete/{{ $author->id }}" method="post" class="deletion-form d-inline"> 
+                <a href="/genres/update/{{ $genre->id }}" class="btn btn-outline-primary btnsm">Edit</a>
+                <form action="/genres/delete/{{ $genre->id }}" method="post" class="deletion-form d-inline">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                 </form>

@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Author;
 
-
 class AuthorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    // display all authors
+
+
     public function list()
     {
         $items = Author::orderBy('name', 'asc')->get();
@@ -19,7 +25,6 @@ class AuthorController extends Controller
             ]
         );
     }
-
     public function create()
     {
         return view(
@@ -27,11 +32,9 @@ class AuthorController extends Controller
             [
                 'title' => 'Add new author',
                 'author' => new Author()
-
             ]
         );
     }
-
     public function put(Request $request)
     {
         $validatedData = $request->validate([
@@ -42,7 +45,6 @@ class AuthorController extends Controller
         $author->save();
         return redirect('/authors');
     }
-
     public function update(Author $author)
     {
         return view(
@@ -53,7 +55,6 @@ class AuthorController extends Controller
             ]
         );
     }
-
     public function patch(Author $author, Request $request)
     {
         $validatedData = $request->validate([
@@ -63,13 +64,10 @@ class AuthorController extends Controller
         $author->save();
         return redirect('/authors');
     }
-
     public function delete(Author $author)
     {
         $author->delete();
         return redirect('/authors');
     }
-
     
 }
-

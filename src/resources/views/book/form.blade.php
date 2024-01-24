@@ -4,8 +4,8 @@
 @if ($errors->any())
 <div class="alert alert-danger">Please fix the validation errors!</div>
 @endif
-<form method="post" action="{{ $book->exists ? '/books/patch/' . $book->id : '/books/put' }}"
-    enctype="multipart/form-data">
+<form enctype="multipart/form-data" method="post"
+    action="{{ $book->exists ? '/books/patch/' . $book->id : '/books/put' }}">
     @csrf
     <div class="mb-3">
         <label for="book-name" class="form-label">Name</label>
@@ -21,17 +21,31 @@
             <option value="">Choose the author!</option>
             @foreach($authors as $author)
             <option value="{{ $author->id }}" @if ($author->id == old('author_id', $book->author->id ?? false)) selected
-                @endif
-                >{{ $author->name }}</option>
+                @endif>{{ $author->name }}</option>
             @endforeach
         </select>
         @error('author_id')
         <p class="invalid-feedback">{{ $errors->first('author_id') }}</p>
         @enderror
     </div>
+
     <div class="mb-3">
-        <label for="book-description" class="form-label">Description</label>
-        <textarea id="book-description" name="description"
+        <label for="book-genre" class="form-label">Genre</label>
+        <select id="book-genre" name="genre_id" class="form-select @error('genre_id') is-invalid @enderror">
+            <option value="">Choose the genre!</option>
+            @foreach($genres as $genre)
+            <option value="{{ $genre->id }}" @if ($genre->id == old('genre_id', $book->genre->id ?? false)) selected
+                @endif>{{ $genre->name }}</option>
+            @endforeach
+        </select>
+        @error('genre_id')
+        <p class="invalid-feedback">{{ $errors->first('genre_id') }}</p>
+        @enderror
+    </div>
+
+    <div class="mb-3">
+        <label for="book-description" class="form-label">Description</label><textarea id="book-description"
+            name="description"
             class="form-control @error('description') is-invalid @enderror">{{ old('description', $book->description) }}</textarea>
         @error('description')
         <p class="invalid-feedback">{{ $errors->first('description') }}</p>
@@ -80,7 +94,6 @@
             @enderror
         </div>
     </div>
-
     <button type="submit" class="btn btn-primary">
         {{ $book->exists ? 'Update' : 'Create' }}
     </button>
